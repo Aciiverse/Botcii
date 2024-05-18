@@ -3,9 +3,13 @@
         "module": "commonjs",
         "target": "ES2022",
         "sourceMap": true,
-        "rootDir": "bot/src",
-        "outDir": "./bot",
-        "types": ["node"]
+        "rootDir": "src",
+        "baseUrl": "./",
+        "outDir": "./dist",
+        "types": ["node"],
+        "strict": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true
     },
     "exclude": [
         "node_modules",

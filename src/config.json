@@ -1,0 +1,8 @@
+{
+    "commands": [
+        {
+            "name": "hi",
+            "description": "Say hello to Botcii 🥑🙂"
+        }
+    ]
+}
