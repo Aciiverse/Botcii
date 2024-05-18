@@ -3,8 +3,8 @@
         "module": "commonjs",
         "target": "ES2022",
         "sourceMap": true,
-        "rootDir": "src",
-        "outDir": "./",
+        "rootDir": "bot/src",
+        "outDir": "./bot",
         "types": ["node"]
     },
     "exclude": [
