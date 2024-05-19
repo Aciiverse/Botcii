@@ -1,5 +1,5 @@
-import { REST, Routes } from "discord.js"
-import config from "../config.json"
+import { REST, Routes, SlashCommandBuilder } from "discord.js"
+import config from "../config";
 
 require('dotenv').config();
 
@@ -14,11 +14,10 @@ export module RegCmds {
      * @date 19.05.2024
      */
     export async function updateCmnds (): Promise<void> {
-
-        const   cmds        = config.commands,
+        const   mode        = process.env.MODE,
+                cmds        = config.commands,
                 token       = process.env.TOKEN,
-                clientID    = process.env.CLIENTID,
-                guildID     = process.env.GUILDID;
+                clientID    = process.env.CLIENTID;
 
         if (typeof(token) !== "string") {
             // -> token is unvalid
@@ -28,28 +27,52 @@ export module RegCmds {
             // -> client id is unvalid
             console.error("client id unvalid");
             return;
-        } else if (typeof(guildID) !== "string") {
-            // -> guild id is unvalid
-            console.error("guild id unvalid");
-            return;
         }
 
         const rest = new REST().setToken(token);
 
-        try {
+        switch (mode) {
+            case "PROD":
+                // -> PRODUCTION Mode -> PUBLIC command
+                try {
+                    await rest.put(Routes.applicationCommands(clientID),
+                        {
+                            body: cmds
+                        }
+                    );
 
-            await rest.put(Routes.applicationGuildCommands(clientID, guildID),
-                {
-                    body: cmds
-                });
-
-            console.log("Commands successfully registered");
-
-        } catch (error) {
-            // -> Error occured
-            console.error(error);
+                    console.log("Commands successfully globally registered");
+                } catch (error) {
+                    // -> Error occured
+                    console.error(error);
+                    
+                }
+                break;
             
-        }
+            case "DEV":
+                // -> LOCAL DEV mode -> GUILD command
+                const guildID = process.env.GUILDID;
 
+                if (typeof(guildID) !== "string") {
+                    // -> guild id is unvalid
+                    console.error("guild id unvalid");
+                    return;
+                }
+
+                try {
+                    await rest.put(Routes.applicationGuildCommands(clientID, guildID),
+                        {
+                            body: cmds
+                        }
+                    );
+
+                    console.log("Commands successfully for guild registered");
+                } catch (error) {
+                    // -> Error occured
+                    console.error(error);
+                    
+                }
+                break;        
+        }
     };
 }

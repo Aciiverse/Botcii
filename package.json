@@ -8,5 +8,8 @@
     "discord.js": "^14.15.2",
     "dotenv": "^16.4.5",
     "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12"
   }
 }
