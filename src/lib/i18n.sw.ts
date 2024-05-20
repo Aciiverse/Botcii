@@ -12,6 +12,7 @@ export namespace I18nSW {
 
     /**
      * @method gets a text from by a key
+     * @priority "options.lang" parameter > selected language (config) > fallback language (config)
      * @param {string} key the key identifier for the text
      * @param {I18nSWGetTextOptions} options? language or values for replacement (optional parameter)
      * @returns {string} the text you want

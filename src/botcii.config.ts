@@ -8,7 +8,7 @@ interface BotciiConfig {
 const botciiConfig: BotciiConfig = {
     i18nSW: {
         selectedLanguage: 'de',
-        fallbackLanguage: 'en'
+        fallbackLanguage: 'en-US'
     }
 };
 

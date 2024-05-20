@@ -4,11 +4,13 @@ const language = {
 
     // Error messages
     errUnknInteraction: "Unbekannte Interaktion",
+    errInvalidChannel: "Channel nicht verfügbar. Bitte wähle einen anderen aus.",
     errUnknCmd: "Den Befehl kenn ich nicht 🥲",
+    errEmptyProperty: "{0} darf nicht leer sein 🤨",
+    errNoPerm: "Du darfst das leider nicht tun! 🫷🏼",
     err: "Sry, es ist ein Fehler aufgetreten",
 
-    // Commands
-    cmdHiDescr: "Sag hallo zu Botcii 🥑🙂",
-    cmdHiReplyMsg: "Hi {0} 🥑🙂"
+    // Command /hi
+    cmdHiReplyMsg: "Hi {0} 🥑🙂!",
 }
 export default language;

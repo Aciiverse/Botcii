@@ -6,7 +6,7 @@ import { I18nSW } from "./lib/i18n.sw";
 require('dotenv').config();
 
 interface CmdMap {
-    [cmdName: string]: (interaction: ChatInputCommandInteraction<CacheType>) => any;
+    [cmdName: string]: (client: Client<boolean>, interaction: ChatInputCommandInteraction<CacheType>) => any;
 }
 
 const token = process.env.TOKEN;
@@ -31,7 +31,7 @@ client.on(Events.ClientReady, (client) => {
 client.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isChatInputCommand()) {
         // -> Unknown command -> Error & Return
-        console.error(I18nSW.getText("errUnknInteraction"));
+        console.error(I18nSW.getText("errUnknInteraction", { lang: interaction.locale }));
         return;
     }
     const   cmd     = interaction.commandName,
@@ -41,7 +41,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         if (!fs.existsSync(path)) {
             // -> path not exists
-            const msg = I18nSW.getText("errUnknCmd");
+            const msg = I18nSW.getText("errUnknCmd", { lang: interaction.locale });
             interaction.reply(msg);
             console.error(msg);
             return;
@@ -52,18 +52,18 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         if (typeof(cmdFunction) !== "function") {
             // -> command has not a function -> Error
-            const msg = I18nSW.getText("errUnknCmd");
+            const msg = I18nSW.getText("errUnknCmd", { lang: interaction.locale });
             console.error(msg);
             interaction.reply(msg);
             return;
         }
 
-        return await cmdFunction(interaction);
+        return await cmdFunction(client, interaction);
 
     } catch (error) {
         // -> Catch unexpected error
         console.error(error);
-        interaction.reply(I18nSW.getText("err"));
+        interaction.reply(I18nSW.getText("err", { lang: interaction.locale }));
     }
 });
 
