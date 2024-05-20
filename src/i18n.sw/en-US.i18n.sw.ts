@@ -1,6 +1,7 @@
 const language = {
     // Success Messages
     I18nSWLoaded: "i18n - ScriptWerk loaded",
+    sucMessageSended: "Message has been sent 🥑🙂",
 
     // Error messages
     errUnknInteraction: "Unknown interaction",

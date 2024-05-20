@@ -68,4 +68,5 @@ export function write (client: Client<boolean>, interaction: ChatInputCommandInt
     }
 
     channel.send(messageOpt?.value);
+    interaction.reply(I18nSW.getText("sucMessageSended", { lang: interaction.locale }));
 }
