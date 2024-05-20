@@ -1,5 +1,5 @@
-import { REST, Routes, SlashCommandBuilder } from "discord.js"
-import config from "../config";
+import { REST, Routes } from "discord.js"
+import commandsConfig from "../commands.config";
 
 require('dotenv').config();
 
@@ -15,13 +15,13 @@ export module RegCmds {
      */
     export async function updateCmnds (): Promise<void> {
         const   mode        = process.env.MODE,
-                cmds        = config.commands,
+                cmds        = commandsConfig.commands,
                 token       = process.env.TOKEN,
                 clientID    = process.env.CLIENTID;
 
         if (typeof(token) !== "string") {
             // -> token is unvalid
-            console.error("token unvalid");
+            console.error("token invalid");
             return;
         } else if (typeof(clientID) !== "string") {
             // -> client id is unvalid

@@ -1,19 +1,18 @@
 import { ApplicationCommandType, RESTPostAPIChatInputApplicationCommandsJSONBody } from "discord.js";
+import { I18nSW } from "./lib/i18n.sw";
 
-interface BotciiConfig {
+interface CommandsConfig {
     commands: RESTPostAPIChatInputApplicationCommandsJSONBody[]
 }
 
-const config: BotciiConfig = {
-
+const commandsConfig: CommandsConfig = {
     commands: [
         {
             name: "hi",
-            description: "Say hello to Botcii 🥑🙂",
+            description: I18nSW.getText("cmdHiDescr"),
             type: ApplicationCommandType.ChatInput
         }
     ]
-
 };
 
-export default config
+export default commandsConfig

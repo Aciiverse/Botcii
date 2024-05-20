@@ -1,6 +1,7 @@
 import { CacheType, ChatInputCommandInteraction, Client, Events, GatewayIntentBits } from "discord.js";
 import { RegCmds } from "./lib/reg-cmds";
 import fs = require('fs');
+import { I18nSW } from "./lib/i18n.sw";
 
 require('dotenv').config();
 
@@ -15,6 +16,9 @@ const client = new Client({
     intents: [GatewayIntentBits.Guilds]
 });
 
+// Test i18nSW
+console.log(I18nSW.getText("I18nSWLoaded"));
+
 // Update the registered commands
 RegCmds.updateCmnds();
 
@@ -27,7 +31,7 @@ client.on(Events.ClientReady, (client) => {
 client.on(Events.InteractionCreate, async (interaction) => {
     if (!interaction.isChatInputCommand()) {
         // -> Unknown command -> Error & Return
-        console.error("Interaction unknown")
+        console.error(I18nSW.getText("errUnknInteraction"));
         return;
     }
     const   cmd     = interaction.commandName,
@@ -37,7 +41,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         if (!fs.existsSync(path)) {
             // -> path not exists
-            console.error("command not exists");
+            const msg = I18nSW.getText("errUnknCmd");
+            interaction.reply(msg);
+            console.error(msg);
             return;
         }
 
@@ -46,7 +52,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         if (typeof(cmdFunction) !== "function") {
             // -> command has not a function -> Error
-            console.error("Not a function");
+            const msg = I18nSW.getText("errUnknCmd");
+            console.error(msg);
+            interaction.reply(msg);
             return;
         }
 
@@ -55,7 +63,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     } catch (error) {
         // -> Catch unexpected error
         console.error(error);
-
+        interaction.reply(I18nSW.getText("err"));
     }
 });
 
