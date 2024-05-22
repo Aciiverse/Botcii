@@ -13,5 +13,7 @@ const language = {
 
     // Command /hi
     cmdHiReplyMsg: "Hi {0} 🥑🙂!",
+    cmdCopyMessageSelectPlaceholder: "Wähle einen Channel ⬇️",
+    cmdCopyMessageSelected: "Channel ausgewählt ✅",
 }
 export default language;

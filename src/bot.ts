@@ -1,4 +1,4 @@
-import { CacheType, ChatInputCommandInteraction, Client, Events, GatewayIntentBits } from "discord.js";
+import { CacheType, ChannelSelectMenuInteraction, ChatInputCommandInteraction, Client, Events, GatewayIntentBits, MessageContextMenuCommandInteraction } from "discord.js";
 import { RegCmds } from "./lib/reg-cmds";
 import fs = require('fs');
 import { I18nSW } from "./lib/i18n.sw";
@@ -6,7 +6,10 @@ import { I18nSW } from "./lib/i18n.sw";
 require('dotenv').config();
 
 interface CmdMap {
-    [cmdName: string]: (client: Client<boolean>, interaction: ChatInputCommandInteraction<CacheType>) => any;
+    [cmdName: string]: (
+        client: Client<boolean>,
+        interaction: ChatInputCommandInteraction<CacheType> | MessageContextMenuCommandInteraction<CacheType> | ChannelSelectMenuInteraction<CacheType>
+    ) => any;
 }
 
 const token = process.env.TOKEN;
@@ -29,13 +32,26 @@ client.on(Events.ClientReady, (client) => {
 
 // Handle client interaction
 client.on(Events.InteractionCreate, async (interaction) => {
-    if (!interaction.isChatInputCommand()) {
+    let cmd: string;
+
+    if (!interaction.isChatInputCommand() && !interaction.isMessageContextMenuCommand() && !interaction.isChannelSelectMenu()) {
         // -> Unknown command -> Error & Return
         console.error(I18nSW.getText("errUnknInteraction", { lang: interaction.locale }));
         return;
     }
-    const   cmd     = interaction.commandName,
-            path    = `${__dirname}/commands/${cmd}.js`;
+
+    if (interaction.isChannelSelectMenu()) {
+        // -> select menu interaction
+        const   customID = interaction.customId,
+                fileKey = customID.split("-")[0]
+
+        cmd = fileKey;
+    } else {
+        // -> chat input or context menu interactiob
+        cmd = interaction.commandName;
+    }
+
+    const path = `${__dirname}/commands/${cmd}.js`;
 
     try {
 
@@ -47,8 +63,22 @@ client.on(Events.InteractionCreate, async (interaction) => {
             return;
         }
 
-        const   commandModule   = await import(path),
-                cmdFunction     = (commandModule as CmdMap)[cmd];
+        const commandModule = await import(path);
+        let functionName: string;
+
+        if (interaction.isChannelSelectMenu()) {
+            // -> select menu interaction
+            const   customID    = interaction.customId,
+                    funcKey     = customID.split("-")[1]
+    
+            functionName = funcKey;
+        } else {
+            // -> chat input or context menu interactiob
+            functionName = cmd;
+        }
+        
+        
+        const cmdFunction = (commandModule as CmdMap)[functionName];
 
         if (typeof(cmdFunction) !== "function") {
             // -> command has not a function -> Error
@@ -65,6 +95,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
         console.error(error);
         interaction.reply(I18nSW.getText("err", { lang: interaction.locale }));
     }
+});
+
+// No crash by error
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception: ', error);
 });
 
 client.login(token);

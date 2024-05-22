@@ -1,7 +1,7 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, PermissionFlags, PermissionFlagsBits, RESTPostAPIChatInputApplicationCommandsJSONBody } from "discord.js";
+import { ApplicationCommandOptionType, ApplicationCommandType, PermissionFlagsBits, RESTPostAPIApplicationCommandsJSONBody } from "discord.js";
 
 interface CommandsConfig {
-    commands: RESTPostAPIChatInputApplicationCommandsJSONBody[]
+    commands: RESTPostAPIApplicationCommandsJSONBody[]
 }
 
 const commandsConfig: CommandsConfig = {
@@ -51,8 +51,16 @@ const commandsConfig: CommandsConfig = {
                     }
                 }
             ]
+        },
+        {
+            name: "copyMessage",
+            type: ApplicationCommandType.Message,
+            default_member_permissions: PermissionFlagsBits.Administrator.toString(),
+            name_localizations: {
+                de: "kopiereNachricht"
+            }
         }
     ]
 };
 
-export default commandsConfig
+export default commandsConfig;

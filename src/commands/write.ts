@@ -1,9 +1,6 @@
-import { BaseGuildTextChannel, CacheType, ChatInputCommandInteraction, Client, PermissionFlagsBits } from "discord.js";
+import { BaseGuildTextChannel, CacheType, ChatInputCommandInteraction, Client, MessageContextMenuCommandInteraction, PermissionFlagsBits } from "discord.js";
 import { I18nSW } from "../lib/i18n.sw";
 
-interface InteractionOptionsData {
-
-}
 /**
  * @method handels the /write command
  * @param {Client<boolean>} client the client property
@@ -12,7 +9,7 @@ interface InteractionOptionsData {
  * @memberof ScriptWerk
  * @date 19.05.2024
  */
-export function write (client: Client<boolean>, interaction: ChatInputCommandInteraction<CacheType>) {
+export function write (client: Client<boolean>, interaction: ChatInputCommandInteraction<CacheType> | MessageContextMenuCommandInteraction<CacheType>) {
     const   optionsData = interaction.options.data,
             channelOpt  = optionsData.find(e => e.name === "channel"),
             messageOpt  = optionsData.find(e => e.name === "message"),
