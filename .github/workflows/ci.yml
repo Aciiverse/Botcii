@@ -27,8 +27,8 @@ jobs:
     - name: Create env file
       run: |
         touch .env
-        echo TOKEN=${{ secrets.TOKEN }}
-        echo CLIENTID=${{ secrets.CLIENTID }}
-        echo MODE=${{ secrets.MODE }}
+        echo TOKEN=${{ secrets.TOKEN }} >> .env
+        echo CLIENTID=${{ secrets.CLIENTID }} >> .env
+        echo MODE=${{ secrets.MODE }} >> .env
     - name: Run app
       run: pm2 restart botcii
