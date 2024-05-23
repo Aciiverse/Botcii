@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, ApplicationCommandType, PermissionFlagsBits, RESTPostAPIApplicationCommandsJSONBody } from "discord.js";
+import { ApplicationCommandOptionType, ApplicationCommandType, ChannelType, PermissionFlagsBits, RESTPostAPIApplicationCommandsJSONBody } from "discord.js";
 
 interface CommandsConfig {
     commands: RESTPostAPIApplicationCommandsJSONBody[]
@@ -32,7 +32,7 @@ const commandsConfig: CommandsConfig = {
                     type: ApplicationCommandOptionType.Channel,
                     required: true,
                     name_localizations: {
-                        de: "kanal"
+                        de: "channel"
                     },
                     description_localizations: {
                         de: "Der Channel, in dem die Nachricht angezeigt werden soll"
@@ -59,6 +59,46 @@ const commandsConfig: CommandsConfig = {
             name_localizations: {
                 de: "kopiereNachricht"
             }
+        },
+        {
+            name: "autochanneladd",
+            description: "Add a new channel for automatic channel creation",
+            type: ApplicationCommandType.ChatInput,
+            default_member_permissions: PermissionFlagsBits.Administrator.toString(),
+            name_localizations: {
+                de: "autochannelhinzufügen"
+            },
+            description_localizations: {
+                de: "Füge einen neuen Channel für die automatische Channelerstellung hinzu"
+            },
+            options: [
+                {
+                    name: "joinchannel",
+                    description: "The channel that users enter to create a channel.",
+                    type: ApplicationCommandOptionType.Channel,
+                    channel_types: [ChannelType.GuildVoice],
+                    required: true,
+                    name_localizations: {
+                        de: "joinchannel"
+                    },
+                    description_localizations: {
+                        de: "Der Channel, den die User betreten, um einen Channel zu erstellen."
+                    }
+                },
+                {
+                    name: "targetcategory",
+                    description: "The target category, where the channel should appear.",
+                    type: ApplicationCommandOptionType.Channel,
+                    channel_types: [ChannelType.GuildCategory],
+                    required: true,
+                    name_localizations: {
+                        de: "zielkategorie"
+                    },
+                    description_localizations: {
+                        de: "Die Zielkategory, wo der Channel erscheinen soll."
+                    }
+                }
+            ]
         }
     ]
 };

@@ -2,8 +2,10 @@ const language = {
     // Success Messages
     I18nSWLoaded: "i18n - ScriptWerk geladen",
     sucMessageSended: "Nachricht wurde gesendet 🥑🙂",
+    sucAutoChannelAdded: "AutoChannel wurde hinzugefügt ✅",
 
     // Error messages
+    errChannelAlreadyUsed: "Channel wird bereits benutzt. Lösche diesen zuerst. 🛑",
     errUnknInteraction: "Unbekannte Interaktion",
     errInvalidChannel: "Channel nicht verfügbar. Bitte wähle einen anderen aus.",
     errUnknCmd: "Den Befehl kenn ich nicht 🥲",

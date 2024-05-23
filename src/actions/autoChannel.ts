@@ -2,7 +2,7 @@ import { ChannelType, VoiceState } from "discord.js";
 import { db } from "../lib/db";
 import { ResultSetHeader } from "mysql2";
 
-interface AutoChannelEntry extends ResultSetHeader {
+export interface AutoChannelEntry extends ResultSetHeader {
     guildId:                string,
     channelId:              string,
     parentChannelGroupId:   string
