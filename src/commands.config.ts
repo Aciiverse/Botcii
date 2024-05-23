@@ -61,44 +61,69 @@ const commandsConfig: CommandsConfig = {
             }
         },
         {
-            name: "autochanneladd",
-            description: "Add a new channel for automatic channel creation",
+            name: "autochannel",
+            description: "AutoChannel mdule",
             type: ApplicationCommandType.ChatInput,
             default_member_permissions: PermissionFlagsBits.Administrator.toString(),
             name_localizations: {
-                de: "autochannelhinzufügen"
+                de: "autochannel"
             },
             description_localizations: {
-                de: "Füge einen neuen Channel für die automatische Channelerstellung hinzu"
+                de: "AutoChannel Modul"
             },
             options: [
                 {
-                    name: "joinchannel",
-                    description: "The channel that users enter to create a channel.",
-                    type: ApplicationCommandOptionType.Channel,
-                    channel_types: [ChannelType.GuildVoice],
-                    required: true,
+                    name: "add",
+                    description: "Add a new channel for automatic channel creation.",
+                    type: ApplicationCommandOptionType.Subcommand,
                     name_localizations: {
-                        de: "joinchannel"
+                        de: "hinzufügen"
                     },
                     description_localizations: {
-                        de: "Der Channel, den die User betreten, um einen Channel zu erstellen."
-                    }
+                        de: "Füge einen neuen Channel für die automatische Channelerstellung hinzu."
+                    },
+                    options: [
+                        {
+                            name: "joinchannel",
+                            description: "The channel that users enter to create a channel.",
+                            type: ApplicationCommandOptionType.Channel,
+                            channel_types: [ChannelType.GuildVoice],
+                            required: true,
+                            name_localizations: {
+                                de: "joinchannel"
+                            },
+                            description_localizations: {
+                                de: "Der Channel, den die User betreten, um einen Channel zu erstellen."
+                            }
+                        },
+                        {
+                            name: "targetcategory",
+                            description: "The target category, where the channel should appear.",
+                            type: ApplicationCommandOptionType.Channel,
+                            channel_types: [ChannelType.GuildCategory],
+                            required: true,
+                            name_localizations: {
+                                de: "zielkategorie"
+                            },
+                            description_localizations: {
+                                de: "Die Zielkategory, wo der Channel erscheinen soll."
+                            }
+                        }
+                    ]
                 },
                 {
-                    name: "targetcategory",
-                    description: "The target category, where the channel should appear.",
-                    type: ApplicationCommandOptionType.Channel,
-                    channel_types: [ChannelType.GuildCategory],
-                    required: true,
+                    name: "list",
+                    description: "List of all autochannel configurations.",
+                    type: ApplicationCommandOptionType.Subcommand,
                     name_localizations: {
-                        de: "zielkategorie"
+                        de: "liste"
                     },
                     description_localizations: {
-                        de: "Die Zielkategory, wo der Channel erscheinen soll."
-                    }
+                        de: "Liste von allen autoChannel Konfigurationen."
+                    },
                 }
             ]
+            
         }
     ]
 };

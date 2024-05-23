@@ -1,4 +1,4 @@
-import { CacheType, ChannelSelectMenuInteraction, ChatInputCommandInteraction, Client, Events, GatewayIntentBits, MessageContextMenuCommandInteraction } from "discord.js";
+import { ButtonInteraction, CacheType, ChannelSelectMenuInteraction, ChatInputCommandInteraction, Client, Events, GatewayIntentBits, MessageContextMenuCommandInteraction } from "discord.js";
 import { RegCmds } from "./lib/reg-cmds";
 import fs = require('fs');
 import { I18nSW } from "./lib/i18n.sw";
@@ -10,7 +10,7 @@ require('dotenv').config();
 interface CmdMap {
     [cmdName: string]: (
         client: Client<boolean>,
-        interaction: ChatInputCommandInteraction<CacheType> | MessageContextMenuCommandInteraction<CacheType> | ChannelSelectMenuInteraction<CacheType>
+        interaction: ChatInputCommandInteraction<CacheType> | MessageContextMenuCommandInteraction<CacheType> | ChannelSelectMenuInteraction<CacheType> | ButtonInteraction
     ) => any;
 }
 
@@ -39,13 +39,13 @@ client.on(Events.ClientReady, (client) => {
 client.on(Events.InteractionCreate, async (interaction) => {
     let cmd: string;
 
-    if (!interaction.isChatInputCommand() && !interaction.isMessageContextMenuCommand() && !interaction.isChannelSelectMenu()) {
+    if (!interaction.isChatInputCommand() && !interaction.isMessageContextMenuCommand() && !interaction.isChannelSelectMenu() && !interaction.isButton()) {
         // -> Unknown command -> Error & Return
         console.error(I18nSW.getText("errUnknInteraction", { lang: interaction.locale }));
         return;
     }
 
-    if (interaction.isChannelSelectMenu()) {
+    if (interaction.isChannelSelectMenu() || interaction.isButton()) {
         // -> select menu interaction
         const   customID = interaction.customId,
                 fileKey = customID.split("-")[0]
