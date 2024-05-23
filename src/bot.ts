@@ -3,6 +3,7 @@ import { RegCmds } from "./lib/reg-cmds";
 import fs = require('fs');
 import { I18nSW } from "./lib/i18n.sw";
 import { db } from "./lib/db";
+import { onUserJoinsChannel, onUserLeavesChannel } from "./actions/autoChannel";
 
 require('dotenv').config();
 
@@ -105,14 +106,15 @@ client.on(Events.InteractionCreate, async (interaction) => {
 client.on(Events.VoiceStateUpdate, (oldState, newState) => {
     if (oldState.channel) {
         // -> user leaves a channel
-        // console.log("User leaves a channel");
+        console.log(`${oldState.member?.displayName} joins channel ${oldState.channel?.name}`);
+        onUserLeavesChannel(oldState);
 
     }
     
     if (newState.channel) {
         // -> user joins a channel
-        console.log("User joins a channel");
-        
+        console.log(`${newState.member?.displayName} joins channel ${newState.channel?.name}`);
+        onUserJoinsChannel(newState);
     }
 });
 
