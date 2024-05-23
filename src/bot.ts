@@ -2,6 +2,7 @@ import { CacheType, ChannelSelectMenuInteraction, ChatInputCommandInteraction, C
 import { RegCmds } from "./lib/reg-cmds";
 import fs = require('fs');
 import { I18nSW } from "./lib/i18n.sw";
+import { db } from "./lib/db";
 
 require('dotenv').config();
 
@@ -16,7 +17,10 @@ const token = process.env.TOKEN;
 
 // Client creation & starting
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds]
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildVoiceStates
+    ]
 });
 
 // Test i18nSW
@@ -94,6 +98,21 @@ client.on(Events.InteractionCreate, async (interaction) => {
         // -> Catch unexpected error
         console.error(error);
         interaction.reply(I18nSW.getText("err", { lang: interaction.locale }));
+    }
+});
+
+// Handle User Voice Channel join / Leave
+client.on(Events.VoiceStateUpdate, (oldState, newState) => {
+    if (oldState.channel) {
+        // -> user leaves a channel
+        // console.log("User leaves a channel");
+
+    }
+    
+    if (newState.channel) {
+        // -> user joins a channel
+        console.log("User joins a channel");
+        
     }
 });
 
