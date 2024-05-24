@@ -1,14 +1,16 @@
-import { CacheType, ChannelSelectMenuInteraction, ChatInputCommandInteraction, Client, Events, GatewayIntentBits, MessageContextMenuCommandInteraction } from "discord.js";
+import { ButtonInteraction, CacheType, ChannelSelectMenuInteraction, ChatInputCommandInteraction, Client, Events, GatewayIntentBits, MessageContextMenuCommandInteraction } from "discord.js";
 import { RegCmds } from "./lib/reg-cmds";
 import fs = require('fs');
 import { I18nSW } from "./lib/i18n.sw";
+import { db } from "./lib/db";
+import { onUserJoinsChannel, onUserLeavesChannel } from "./actions/autoChannel";
 
 require('dotenv').config();
 
 interface CmdMap {
     [cmdName: string]: (
         client: Client<boolean>,
-        interaction: ChatInputCommandInteraction<CacheType> | MessageContextMenuCommandInteraction<CacheType> | ChannelSelectMenuInteraction<CacheType>
+        interaction: ChatInputCommandInteraction<CacheType> | MessageContextMenuCommandInteraction<CacheType> | ChannelSelectMenuInteraction<CacheType> | ButtonInteraction
     ) => any;
 }
 
@@ -16,7 +18,10 @@ const token = process.env.TOKEN;
 
 // Client creation & starting
 const client = new Client({
-    intents: [GatewayIntentBits.Guilds]
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildVoiceStates
+    ]
 });
 
 // Test i18nSW
@@ -34,13 +39,13 @@ client.on(Events.ClientReady, (client) => {
 client.on(Events.InteractionCreate, async (interaction) => {
     let cmd: string;
 
-    if (!interaction.isChatInputCommand() && !interaction.isMessageContextMenuCommand() && !interaction.isChannelSelectMenu()) {
+    if (!interaction.isChatInputCommand() && !interaction.isMessageContextMenuCommand() && !interaction.isChannelSelectMenu() && !interaction.isButton()) {
         // -> Unknown command -> Error & Return
         console.error(I18nSW.getText("errUnknInteraction", { lang: interaction.locale }));
         return;
     }
 
-    if (interaction.isChannelSelectMenu()) {
+    if (interaction.isChannelSelectMenu() || interaction.isButton()) {
         // -> select menu interaction
         const   customID = interaction.customId,
                 fileKey = customID.split("-")[0]
@@ -94,6 +99,22 @@ client.on(Events.InteractionCreate, async (interaction) => {
         // -> Catch unexpected error
         console.error(error);
         interaction.reply(I18nSW.getText("err", { lang: interaction.locale }));
+    }
+});
+
+// Handle User Voice Channel join / Leave
+client.on(Events.VoiceStateUpdate, (oldState, newState) => {
+    if (oldState.channel) {
+        // -> user leaves a channel
+        console.log(`${oldState.member?.displayName} joins channel ${oldState.channel?.name}`);
+        onUserLeavesChannel(oldState);
+
+    }
+    
+    if (newState.channel) {
+        // -> user joins a channel
+        console.log(`${newState.member?.displayName} joins channel ${newState.channel?.name}`);
+        onUserJoinsChannel(newState);
     }
 });
 
