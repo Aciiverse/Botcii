@@ -24,11 +24,9 @@ jobs:
       run: tsc
     - name: Give rights for execute
       run: chmod 755 ./dist/bot.js
-    - name: Create env file
-      run: |
-        touch .env
-        echo TOKEN=${{ secrets.TOKEN }}
-        echo CLIENTID=${{ secrets.CLIENTID }}
-        echo MODE=${{ secrets.MODE }}
     - name: Run app
       run: pm2 restart botcii
+      env:
+        TOKEN: ${{ secrets.TOKEN }}
+        CLIENTID: ${{ secrets.CLIENTID }}
+        MODE: ${{ secrets.MODE }}
