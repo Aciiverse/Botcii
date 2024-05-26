@@ -6,6 +6,19 @@
             "type": "shell",
             "command": "./.vscode/syncSwiftScript.ps1",
             "problemMatcher": []
+        },
+        {
+            "label": "Merge template changes into dev branch",
+            "type": "shell",
+            "command": [
+                "git pull origin &&",
+                "git fetch template main &&",
+                "git branch dev origin/dev &&",
+                "git checkout dev &&",
+                "git merge template/main &&",
+                "git push origin dev"
+            ],
+            "problemMatcher": []
         }
     ]
 }
